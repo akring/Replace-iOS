@@ -106,7 +106,7 @@
     
     _LNew.alpha = 0;
     
-
+    [self pop_removeAllAnimations];
 }
 
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
@@ -133,8 +133,11 @@
         animation.springSpeed = 8;
         animation.completionBlock = ^(POPAnimation *anim, BOOL finished){
             
-            [self.scview setContentOffset:CGPointMake(0, 0)];
-            [self pop_removeAnimationForKey:@"popAnimation"];
+            if (finished) {
+                
+                [self.scview setContentOffset:CGPointMake(0, 0)];
+                [self pop_removeAnimationForKey:@"popAnimation"];
+            }
         };
         animation.property = [POPAnimatableProperty propertyWithName:@"popAnimationProgress" initializer:^(POPMutableAnimatableProperty *prop) {
             prop.readBlock = ^(ViewController *obj, CGFloat values[]) {
@@ -209,13 +212,14 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 //Wave the trees when the plan fly across them:)
 - (void)setTreeWave{
     
-    _treeWaveProgress = -0.33;
     POPSpringAnimation *animation = [self pop_animationForKey:@"treeWaveAnimation"];
     
     if (!animation) {
         animation = [POPSpringAnimation animation];
         animation.springBounciness = 30;
         animation.springSpeed = 5;
+        animation.fromValue = @(-0.33);
+        animation.toValue =@(0.01);
         animation.completionBlock = ^(POPAnimation *anim, BOOL finished){
             
             if (finished) {
@@ -236,7 +240,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         
         [self pop_addAnimation:animation forKey:@"treeWaveAnimation"];
     }
-    animation.toValue =@(0.01);
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
