@@ -67,6 +67,9 @@
     //Add Tree & Filter
     [self TreeImagenFilter];
     
+    self.view.layer.masksToBounds = YES;
+    self.view.layer.cornerRadius = 8;
+    
     [self addObserver:self forKeyPath:@"treeWaveProgress" options:NSKeyValueObservingOptionNew context:nil];
    
 }
